@@ -1,0 +1,13 @@
+# example netlify.toml
+[build]
+command = "prisma generate && next build"
+publish = ".next"
+
+[template.environment]
+DATABASE_URL = "Database Connection String"
+NEXTAUTH_URL = "NextAuth URL"
+NEXTAUTH_SECRET = "NextAuth Secret"
+
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"

@@ -1,34 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CockroachDB Next.js Starter App
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e73ba2a6-89e0-4c06-954d-16096c00202e/deploy-status)](https://app.netlify.com/sites/nextjs-cockroachdb-starter/deploys)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+## Overview
+
+This is a [Next.js](https://nextjs.org/) v12 project bootstrapped with `create-next-app` and set up to be instantly deployed to [Netlify](https://netlify.com/).
+
+## Stack
+
+- Framework - [Next.js v12](https://nextjs.org)
+- Auth - [NextAuth.js](https://next-auth.js.org/)
+- Database - [CockroachDB](https://cockroachlabs.com)
+- ORM - [Prisma](https://prisma.io)
+- Hosting - [Netlify](https://netlify.com)
 
 ## Getting Started
 
-First, run the development server:
+### CockroachDB Serverless Configuration
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [Create a free serverless cluster](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart.html)
+- Execute the [provided script](./prisma/init_database.sql) using the SQL client to create the database and tables;
+  ```
+  cockroach sql --url [Connection string] --file ./prisma/init_database.sql
+  ```
+- Save the connection string to the `DATABASE_URL` environment variable
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation options
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+**Option one:** One-click deploy
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cockroachlabs/nextjs-cockroachdb-starter)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Clicking this button will create a new repo for you that looks like this one, and sets that repo up immediately for deployment on Netlify. You will be prompted for a repo name and to provide the values for the following environment variables:
 
-## Learn More
+- Postgres Connection String (`DATABASE_URL`), **required** You can find this in the Connect model in the Cockroach Labs Cloud Console
+- NextAuth URL (`NEXTAUTH_URL`), **required for production** The canonical URL of your site.
+- NextAuth Secret (`NEXTAUTH_SECRET`), **required for production** A random string is used to hash tokens, sign/encrypt cookies and generate cryptographic keys. Can be generated using the `openssl` command:
 
-To learn more about Next.js, take a look at the following resources:
+  ```shell
+  openssl rand -base64 32
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Additonal Environment variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This example is set up to use the [GitHub NextAuth Provider](https://next-auth.js.org/providers/github). Follow the instructions provided in that documentation to add variables for `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 
-## Deploy on Vercel
+You may also choose to update this application to use [one or more of the many authentication providers](https://next-auth.js.org/providers/overview).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Option two:** Manual clone
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+You will need to [install the Netlify CLI](https://docs.netlify.com/cli/get-started/) and connect it to your Netlify site to run locally.
+
+1. Clone this repo: `git clone https://github.com/cockroachlabs/nextjs-cockroachdb-starter.git`
+2. Navigate to the directory and run `ntl init` to connect to Netlify
+3. Add the above environment variables using `ntl env:set [env var] [value]`
+4. Run the app locally using `ntl dev`
+5. Make any changes and push to your repo to deploy.
